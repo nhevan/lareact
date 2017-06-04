@@ -9,6 +9,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function search($name)
+    {
+        return $this->where('name', 'LIKE', "%{$name}%")->get();
+    }
+
     /**
      * The attributes that are mass assignable.
      *

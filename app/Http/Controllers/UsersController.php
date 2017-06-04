@@ -16,7 +16,9 @@ class UsersController extends Controller
 
     public function search($name)
     {
+        $users = $this->users->search($name);
         
+        return response()->json($users, 200);
     }
 
     /**
