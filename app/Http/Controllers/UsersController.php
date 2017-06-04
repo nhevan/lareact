@@ -14,6 +14,11 @@ class UsersController extends Controller
         $this->users = $users;
     }
 
+    public function search($name)
+    {
+        
+    }
+
     /**
      * Display a listing of the resource.
      *

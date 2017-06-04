@@ -1,6 +1,7 @@
 import React from 'react';
 import UsersList from './UsersList';
 import UsersPager from './UsersPager';
+import SearchUsers from './SearchUsers'
 
 export default class Users extends React.Component {
   constructor(props) {
@@ -14,13 +15,14 @@ export default class Users extends React.Component {
 
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
+    this.searchUser = this.searchUser.bind(this);
   }
 	componentWillMount() {
 		this.getUsers(1);
 	}
 
 	getUsers(page) {
-		var endpoint = `/users?page=${page}`;
+		var endpoint = `/api/users?page=${page}`;
 		axios.get(endpoint)
 			.then((response) => {
 				this.setState({
@@ -65,15 +67,37 @@ export default class Users extends React.Component {
 		});
 	}
 
+	searchUser(e) {
+		let search_string = e.target.value;
+		
+		if (search_string == "") {
+			this.getUsers(this.state.page);
+			return;
+		}
+
+		this.setState({
+			users: [{
+				name: 'searched user',
+				id: '*'
+			}]
+		});
+		console.log(e.target.value);
+	}
+
 	render() {
 		return (
 		  	<div className="panel panel-default">
-		        <div className="panel-heading">Users List</div>
+		        <div className="panel-heading level">
+		        	<div className="flex">
+			        	<h4>Users</h4>
+		        	</div>
+		        	<SearchUsers search={this.searchUser} />
+	        	</div>
 
 		        <div className="panel-body">
 		            <UsersList users={this.state.users}/>
+					<UsersPager prevPageUrl={this.state.prevPageUrl} nextPageUrl={this.state.nextPageUrl} next={this.next} prev={this.prev} />
 		        </div>
-				<UsersPager prevPageUrl={this.state.prevPageUrl} nextPageUrl={this.state.nextPageUrl} next={this.next} prev={this.prev} />
 		    </div>
 		);
 	}
