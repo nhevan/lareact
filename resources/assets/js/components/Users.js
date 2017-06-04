@@ -21,6 +21,20 @@ export default class Users extends React.Component {
 		this.getUsers(1);
 	}
 
+	searchByUserName(name) {
+		var endpoint = `/api/users/search/${name}`;
+		axios.get(endpoint)
+			.then((response) => {
+				// console.log(response);
+				this.setState({
+					users: response.data,
+				});
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	}
+
 	getUsers(page) {
 		var endpoint = `/api/users?page=${page}`;
 		axios.get(endpoint)
@@ -31,7 +45,6 @@ export default class Users extends React.Component {
 					nextPageUrl: response.data.next_page_url,
 					prevPageUrl: response.data.prev_page_url
 				});
-				console.log(response);
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -75,13 +88,14 @@ export default class Users extends React.Component {
 			return;
 		}
 
-		this.setState({
-			users: [{
-				name: 'searched user',
-				id: '*'
-			}]
-		});
-		console.log(e.target.value);
+		this.searchByUserName(search_string);
+
+		// this.setState({
+		// 	users: [{
+		// 		name: 'searched user',
+		// 		id: '*'
+		// 	}]
+		// });
 	}
 
 	render() {
